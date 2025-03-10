@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="row p-4">
+    <div class="col-lg-2 col-md-3 col-sm-12 bg-white p-3 mb-3 mb-md-0">
+      <h5>All Categories</h5>
+      {% for category in categories %}
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="category" id="{{ category.id }}" />
+          <label class="form-check-label" for="{{ category.id }}"><a href="{% url 'category' category.slug %}" class="text-decoration-none text-dark">{{ category.name }}</a></label>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="col-lg-10 col-md-9 col-sm-12 p-3">
+      <h3>{{ books|length }} result{{ books|length|pluralize }} found</h3>
+      <div class="row pt-5">
+        {% for book in books %}
+          <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+            <div class="card shadow-lg" style="width: 100%;">
+              <img src="{{ book.image.url }}" class="card-img-top pb-5 px-3 pt-3" alt="{{ book.title }}" />
+              <div class="card-body text-center lh-sm">
+                <h5 class="card-title">{{ book.title }}</h5>
+                <p class="card-text">
+                  <strong>Book category:</strong> {{ book.category.name }}
+                </p>
+                <p class="card-text">
+                  <strong>Description:</strong> {{ book.description|truncatewords:10 }}
+                </p>
+                <p class="card-text">
+                  <strong>Borrowing Price:</strong> {{ book.borrowing_price }}
+                </p>
+                {% if user.is_authenticated %}
+                  <a href="{% url 'book_details' book.id %}" class="btn btn-primary">Book Details</a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

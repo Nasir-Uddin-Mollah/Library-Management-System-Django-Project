@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="m-5 text-center">
+    <table class="table mt-3">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Book Name</th>
+          <th scope="col">Book Price</th>
+          <th scope="col">Borrow Date</th>
+          <th scope="col">Balance After Borrow</th>
+          <th scope="col">Return Book</th>
+          <th scope="col">Review</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for borrowed_book in borrowed_books %}
+          <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td>{{ borrowed_book.book.title }}</td>
+            <td>{{ borrowed_book.book.borrowing_price }}</td>
+            <td>{{ borrowed_book.borrow_date }}</td>
+            <td>{{ borrowed_book.balance_after_borrow }}</td>
+            <td>
+              <a href="{% url 'return_book' borrowed_book.id %}" class="btn btn-primary">Return Book</a>
+            </td>
+            <td>
+              <a href="{% url 'book_details' borrowed_book.book.id %}" class="btn btn-info">Review Book</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

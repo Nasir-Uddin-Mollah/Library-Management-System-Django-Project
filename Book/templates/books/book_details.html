@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+  <div class="container mt-5">
+    <div class="row justify-content-between align-items-center">
+      <div class="col-md-6 col-sm-12">
+        <img src="{{ book.image.url }}" style="width: 50%;" class="img-fluid rounded" alt="{{ book.name }}" />
+      </div>
+      <div class="col-md-6 col-sm-12 mt-3 mt-md-0">
+        <div class="card text-center shadow-lg">
+          <div class="card-body lh-sm">
+            <h5 class="card-title">{{ book.name }}</h5>
+            <p class="card-text">
+              <strong>Borrowing Price:</strong> {{ book.borrowing_price }}
+            </p>
+            <p class="card-text">
+              <strong>Description:</strong> {{ book.description }}
+            </p>
+            <p class="card-text">
+              <strong>Book category:</strong> {{ book.category.name }}
+            </p>
+            {% if user.is_authenticated %}
+              {% if not has_borrowed %}
+                <a href="{% url 'borrow_book' book.id %}" class="btn btn-success">Borrow Book</a>
+              {% else %}
+                <p class="text-success fw-bold fs-5">You borrowed this book.</p>
+              {% endif %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mt-5 mb-2" style="background-color: aliceblue;">
+      <h4 class="p-3">Total Comments : {{ comments|length }}</h4>
+      {% for comment in comments %}
+        <div class="card-body m-2 border">
+          <p>
+            <strong>{{ comment.author.first_name }}</strong> {{ comment.comment_date }}
+          </p>
+          <p>
+            <strong>Rated: {{ comment.ratings }}</strong>
+          </p>
+          <p>{{ comment.comment }}</p>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="card mb-5" style="background-color: aliceblue;">
+      <div class="card-body">
+        <form method="post" novalidate>
+          {% csrf_token %}
+          <h2>Add Comment</h2>
+          {{ comment_form|crispy }}
+          <button class="btn btn-primary" type="submit">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
